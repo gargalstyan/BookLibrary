@@ -3,6 +3,7 @@ using BookLibrary.Data.Entities;
 using BookLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace BookLibrary.Controllers
 {
@@ -16,31 +17,24 @@ namespace BookLibrary.Controllers
 
         public IActionResult Index()
         {
-            List<BookModel> bookModels = new List<BookModel>();
+           
             var books = _applicationDbContext.Books
-                .Include(a => a.Authors)
-                .Include(p => p.Publisher);
-
-            if (books != null)
-            {
-
-
-                foreach (var book in books)
+               
+                .Select(book => new BookModel
                 {
-                    bookModels.Add(new BookModel
-                    {
-                        Name = book.Name,
-                        Genre = book.Genre,
-                        Count = book.Count,
-                        Year = book.Year,
-                        Publisher = book.Publisher.Name,
-                        Authors = book.Authors.Select(a => a.Name).ToList(),
-                        Price = book.Price,
-                    });
-                }
-            }
+                    Id = book.ID,
+                    Name = book.Name,
+                    Genre = book.Genre,
+                    Count = book.Count,
+                    Year = book.Year,
+                    Publisher = book.Publisher.Name,
+                    Authors = book.Authors.Select(a => a.Name).ToList(),
+                    Price = book.Price,
 
-            return View(bookModels);
+                }).ToList(); 
+
+
+            return View(books);
         }
         public IActionResult Add()
         {
@@ -79,5 +73,107 @@ namespace BookLibrary.Controllers
                 return View();
             }
         }
+
+
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    BookModel? record = await _applicationDbContext.Books.FindAsync(id); // Read/Write (IO)
+
+        //    await _applicationDbContext.SaveChangesAsync();
+
+        //    return View(record);
+        //}
+
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            BookModel model;
+            var book = _applicationDbContext.Books.FirstOrDefault(b=> b.ID== id);
+            model = new BookModel()
+            {
+                Id = book.ID,
+                Name = book.Name,
+                Genre = book.Genre,
+                Count = book.Count,
+                Year = book.Year,
+                Publisher = book.Publisher.Name,
+                Authors = book.Authors.Select(a => a.Name).ToList(),
+                Price = book.Price
+                
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(BookModel model)
+        {
+            var post = _applicationDbContext.Books.FirstOrDefault(b => b.ID == model.Id);
+            if(post != null)
+            post.Name = model.Name;
+
+            _applicationDbContext.Entry(post).State = EntityState.Modified;
+           
+           
+            _applicationDbContext.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(EmployeeViewModel record)
+        //{
+
+        //    _applicationDbContext.Books.Update(record);
+
+        //    await _applicationDbContext.SaveChangesAsync();
+
+        //    return RedirectToAction("Index");
+        //}
+
+
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var record = await _applicationDbContext.Books.FindAsync(id);
+
+        //    if (record == null)
+        //        return NotFound();
+
+        //    _applicationDbContext.Books.Remove(record);
+
+        //    await _applicationDbContext.SaveChangesAsync();
+
+        //    return RedirectToAction("Index");
+        //}
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+
+            return View(new BookModel { Id = id });
+        }
+
+        [HttpPost]
+        public IActionResult Delete(BookModel model)
+        {
+            var item = _applicationDbContext.Books.FirstOrDefault(b => b.ID == model.Id);
+
+            if (item == null)
+            
+                return NotFound();
+
+
+                _applicationDbContext.Books.Remove(item);
+
+                _applicationDbContext.SaveChanges();
+
+                return RedirectToAction(nameof(Index));           
+          
+        }
+
     }
+
+   
+
+
 }

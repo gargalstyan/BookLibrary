@@ -1,0 +1,18 @@
+﻿@using BookLibrary.Models
+@model BookLibrary.Models.BookModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+<form action ="/Book/Edit" method="post">
+    <input type = "hidden" name="Id" value="@Model.Id" />
+    <input type ="text" name="Name" value="@Model.Name" />
+    <br />
+   
+    <br />
+    <input type ="submit" value="Save"/>
+    <a href ="~/Book/Index">Cancel</a>
+
+</form>

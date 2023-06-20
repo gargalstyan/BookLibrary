@@ -1,0 +1,18 @@
+﻿@using BookLibrary.Models
+@model BookLibrary.Models.BookModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+<form action ="/Book/Delete" method="post">
+    <input type ="hidden" name="Id" value="@Model.Id" />
+    <p>
+        Are you sure to delete the book?
+    </p>
+    
+    <input type ="submit" value="Delete"/>
+    <a href ="~/Book/Index">Cancel</a>
+
+</form>
