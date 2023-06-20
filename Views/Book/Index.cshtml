@@ -26,9 +26,10 @@
                 <td>@item.Price</td>
                 <td>
                     <ul>
-                        @foreach (var author in item.Authors)
+                        @foreach (var author in item.AuthorsName)
                         {
                             <li>@author</li>
+                           <a asp-controller="Book" asp-action="Info" asp-route-id="@item.Id">More info</a>
                         }
                     </ul>
                 </td>

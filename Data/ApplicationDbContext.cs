@@ -13,6 +13,13 @@ namespace BookLibrary.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Book>()
+                .HasQueryFilter(b => !b.Deleted);
+
+            base.OnModelCreating(builder);
+        }
         public virtual DbSet<Book> Books { get; set; }
 
         public virtual DbSet<Author> Authors { get; set; }

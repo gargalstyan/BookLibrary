@@ -5,6 +5,7 @@ namespace BookLibrary.Models
     public class BookModel
     {
         public int Id { get; set; }
+        public int PublisherID { get; set; }
         public string Name { get; set; } = "";
 
         public string? Genre { get; set; }
@@ -17,7 +18,7 @@ namespace BookLibrary.Models
 
         public string Publisher { get; set; } = "";
         public string Location { get; set; } = "";
-
-        public List<string> Authors { get; set; } = new List<string>();
+        public List<string> AuthorsName { get; set; } = new List<string>();
+        public int BirthDate { get; set; }
     }
 }
