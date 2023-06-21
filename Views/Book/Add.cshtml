@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label asp-for="Publisher" class="control-label"></label>
                 <input asp-for="Publisher" class="form-control" />
-                <span asp-validation-for="Publisher" class="text-danger"></span>
+                <span asp-validation-for="Publisher" class`="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
@@ -52,42 +52,24 @@
                     <form asp-action="Add">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <!-- Other input fields for book properties -->
-                        
-                            @*<form>
-                                <label for="author">Select Author:</label>
-                                <select id="author" name="author">
-                                    @foreach (var author in GetAuthorsFromDatabase())
-                                    {
-                                        <option value="@author.Id">@author.Name</option>
-                                    }
-                                </select>
-                                <br /><br />
-                                <input type="submit" value="Submit" />
-                            </form>*@
-                     
-                    <div class="form-group">
-                        <label for="AuthorCount">Number of Authors</label>
-                        <select id="AuthorCount" class="form-control" onchange="addAuthorInputs()">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label for="AuthorCount">Number of Authors</label>
+                            <select id="AuthorCount" class="form-control" onchange="addAuthorInputs()">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
 
-                    <div id="authorInputsContainer">
-                        <!-- Author input fields will be dynamically added here -->
-                    </div>
+                        <div id="authorInputsContainer"></div>
 
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
+                        <input type="submit" value="Submit" />
+
+                    </form>
+                </div>
             </div>
-        </div>
-
-            @section scripts {
             <script>
                 function addAuthorInputs() {
                     var authorCount = document.getElementById("AuthorCount").value;
@@ -96,21 +78,49 @@
 
                     for (var i = 0; i < authorCount; i++) {
                         var input = '<div class="form-group">' +
-                            '<label for="Authors[' + i + '].Name">Author ' + (i + 1) + '</label>' +
-                            '<input type="text" name="AuthorsName[' + i + ']" class="form-control" />' +
-                            '</div>';
+                            '<label for="Authors[' + i + '].ID">Author ' + (i + 1) + '</label>' +
+                            '<select name="Authors[' + i + '].ID" class="form-control" onchange="updateAuthorLabel(this, ' + i + ')">' +
+                            '<option value="">Select an author</option>';
+
+                        // Add authors from the database here
+                @foreach (var author in Model.Authors)
+                {
+                    <text>
+                                input += '<option value="@author.ID">@author.Name</option>';
+                    </text>
+                }
+
+                            input += '</select></div>';
 
                         container.innerHTML += input;
                     }
+                    document.getElementById("AuthorCountHidden").value = authorCount;
                 }
+
+                function updateAuthorLabel(selectElement, index) {
+                    var selectedOption = selectElement.options[selectElement.selectedIndex];
+                    var labelElement = document.querySelector('label[for="Authors[' + index + '].ID"]');
+                    var authorNameInput = document.querySelector('input[name="Authors[' + index + '].Name"]');
+
+                    // Update the label with the selected author name or "Empty" if no author is selected
+                    if (selectedOption.value !== "") {
+                        labelElement.textContent = "Author " + (index + 1) + ": " + selectedOption.text;
+                        authorNameInput.value = selectedOption.text; // Set the author name in the corresponding hidden input field
+                    } else {
+                        labelElement.textContent = "Author " + (index + 1) + ": Empty";
+                        authorNameInput.value = ""; // Clear the author name in the corresponding hidden input field
+                    }
+
+                }
+
             </script>
-        }
+
 
         </form>
     </div>
-    </div>
+</div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 

@@ -40,7 +40,7 @@ namespace BookLibrary.Controllers
                         Count = book.Count,
                         Year = book.Year,
                         Publisher = book.Publisher.Name,
-                        AuthorsName = book.Authors.Select(a => a.Name).ToList(),
+                        Authors = book.Authors,
                         Price = book.Price,
                     });
                 }
@@ -67,7 +67,7 @@ namespace BookLibrary.Controllers
                 Location = editbook.Publisher.Location,
                 Publisher = editbook.Publisher.Name,
                 /////////////////////////////////////
-                AuthorsName = editbook.Authors.Select(a => a.Name).ToList(),
+                Authors = editbook.Authors,
                 Price = editbook.Price,
             };
 
@@ -89,7 +89,8 @@ namespace BookLibrary.Controllers
             for (int i = 0; i < editbook.Authors.Count; i++)
             {
                 //editbook.Authors[i].Name = bookModel.Authors[i].Name;
-                editbook.Authors[i].Name = bookModel.AuthorsName[i];
+                editbook.Authors[i].Name = bookModel.Authors[i].Name;
+                editbook.Authors[i].BirthData = bookModel.Authors[i].BirthData;
             }
 
             _applicationDbContext.Update(editbook);
@@ -99,6 +100,8 @@ namespace BookLibrary.Controllers
         public IActionResult Add()
         {
             BookModel bookModel = new BookModel();
+            bookModel.Authors = _applicationDbContext.Authors.ToList();
+            bookModel.Publishers = _applicationDbContext.Publishers.ToList();
             return View(bookModel);
         }
         [HttpPost]
@@ -114,10 +117,9 @@ namespace BookLibrary.Controllers
                     Count = bookModel.Count,
                     Price = bookModel.Price,
                 };
-                foreach (var item in bookModel.AuthorsName)
-                {
-                    book.Authors.Add(new Author { Name = item, BirthData = 1988 });
-                }
+                var authorsId = bookModel.Authors.Select(a => a.ID).ToList();   
+                var author = _applicationDbContext.Authors.Where(a =>authorsId.Contains(a.ID)).ToList();
+                book.Authors = author;
 
                 var publisher = _applicationDbContext.Publishers.FirstOrDefault(p => p.Name == bookModel.Publisher && p.Location == bookModel.Location);
                 if (publisher != null)
