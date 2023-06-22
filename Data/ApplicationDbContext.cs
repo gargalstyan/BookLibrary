@@ -17,6 +17,10 @@ namespace BookLibrary.Data
         {
             builder.Entity<Book>()
                 .HasQueryFilter(b => !b.Deleted);
+            builder.Entity<Author>()
+                .HasQueryFilter(b => !b.Deleted);
+            builder.Entity<Publisher>()
+                .HasQueryFilter(b => !b.Deleted);
 
             base.OnModelCreating(builder);
         }

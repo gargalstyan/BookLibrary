@@ -144,9 +144,10 @@ namespace BookLibrary.Controllers
             var editbook = _applicationDbContext.Books
                .Include(a => a.Authors)
                .Include(p => p.Publisher).FirstOrDefault(i => i.ID == id);
+            editbook.Deleted = true;
             if (editbook == null)
                 return NotFound();
-            _applicationDbContext.Books.Remove(editbook);
+            _applicationDbContext.Books.Update(editbook);
             await _applicationDbContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
