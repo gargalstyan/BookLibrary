@@ -15,11 +15,12 @@ namespace BookLibrary.Models
         public decimal Price { get; set; }
 
         public int Count { get; set; }
+     
         public List<Publisher> Publishers { get; set; } = new List<Publisher>();
         public string Publisher { get; set; } = "";
         public string Location { get; set; } = "";
         public List<Author> Authors { get; set; } = new List<Author>();
         //public List<string> AuthorsName { get; set; } = new List<string>();
-        public int BirthDate { get; set; }
+        //public int BirthDate { get; set; }
     }
 }

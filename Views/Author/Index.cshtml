@@ -1,0 +1,30 @@
+﻿@using BookLibrary.Data.Entities
+@using BookLibrary.Models
+@model IEnumerable<Author>
+
+<h1>Authors</h1>
+<table class="table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>BirthData</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.BirthData</td>
+                <td>
+                    <a asp-controller="Author" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Author" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
