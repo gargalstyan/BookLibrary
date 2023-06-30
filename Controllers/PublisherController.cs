@@ -47,5 +47,15 @@ namespace BookLibrary.Controllers
             _applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
         }
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+                return NotFound();
+            var deletePublisher = _applicationDbContext.Publishers.Find(id);
+            _applicationDbContext.Publishers.Remove(deletePublisher!);
+            _applicationDbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
+
