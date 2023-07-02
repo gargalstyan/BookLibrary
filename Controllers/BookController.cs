@@ -167,7 +167,7 @@ namespace BookLibrary.Controllers
             if (searchParam == null)
                 return NotFound();
             var books = _applicationDbContext.Books
-                  .Include(a => a.Authors);
+                  .Include(a => a.Authors).Include(p=>p.Publisher);
             //var authors = books.Select(a => a.Authors.Where(a => a.Name == searchParam));
             List<Book> book = new List<Book>();
             foreach (var item in books)
