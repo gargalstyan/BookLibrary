@@ -1,7 +1,12 @@
 ﻿@using BookLibrary.Data.Entities
 @using BookLibrary.Models
 @model IEnumerable<Author>
-
+<div>
+    <form asp-controller="Author" asp-action="Search" method="get">
+        <input type="text" name="searchParam" placeholder="Enter a parameter" />
+        <input type="submit" value="Search" />
+    </form>
+</div>
 <h1>Authors</h1>
 <table class="table-bordered">
     <thead>

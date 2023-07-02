@@ -1,5 +1,6 @@
 ﻿using BookLibrary.Data;
 using BookLibrary.Data.Entities;
+using BookLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Controllers
@@ -57,6 +58,14 @@ namespace BookLibrary.Controllers
             _applicationDbContext.Authors.Remove(deletedAuthor!);
             _applicationDbContext.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public IActionResult Search(string searchParam)
+        {
+            if (searchParam == null)
+                return NotFound();
+            var books = _applicationDbContext.Authors.Where(n=>n.Name==searchParam);
+            ViewBag.Books = books;
+            return View();
         }
     }
 }

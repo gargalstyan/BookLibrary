@@ -162,5 +162,23 @@ namespace BookLibrary.Controllers
                 return NotFound();
 
         }
+        public IActionResult Search(string searchParam)
+        {
+            if (searchParam == null)
+                return NotFound();
+            var books = _applicationDbContext.Books
+                  .Include(a => a.Authors);
+            //var authors = books.Select(a => a.Authors.Where(a => a.Name == searchParam));
+            List<Book> book = new List<Book>();
+            foreach (var item in books)
+            {
+                if(item.Authors.Exists(a=>a.Name==searchParam))
+                {
+                    book.Add(item);
+                }
+            }
+            ViewBag.Books = book;
+            return View();
+        }
     }
 }

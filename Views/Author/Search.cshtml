@@ -1,0 +1,36 @@
+﻿@using BookLibrary.Data.Entities
+@using BookLibrary.Models
+
+@if (ViewBag.Books != null)
+{
+   
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>BirthData</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Books)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.BirthData</td>
+                    <td>
+                        <a asp-controller="Author" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Author" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <form asp-controller="Author" asp-action="Index" method="get">
+        <button type="submit">Go to Back</button>
+    </form>
+
+}

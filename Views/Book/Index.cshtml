@@ -1,6 +1,11 @@
 ﻿@using BookLibrary.Models
 @model IEnumerable<BookModel>
-
+<div>
+    <form asp-controller="Book" asp-action="Search" method="get">
+        <input type="text" name="searchParam" placeholder="Enter a parameter" />
+        <input type="submit" value="Search" />
+    </form>
+</div>
 <h1>Books</h1>
 <table class="table-bordered">
     <thead>
